@@ -9,6 +9,7 @@ def show_menu():
     c : compress image(s)
     e : change extension of image(s)
     t : make a thumbnail of image(s)
+    q : quit program
     """)
 
 
@@ -27,13 +28,14 @@ def change_extension(path, ext):
             img.save(f"newImages\\{filename}.{ext}")
         except Exception as err:
             print("Something went wrong!", err)
-            
+
 
 def compress_image(path):
     os.chdir(path)
     if not os.path.exists(os.path.join(path, "compressed")):
         os.mkdir("compressed")
     factor = 0.5
+
     for file in os.listdir():
         try:
             img = Image.open(file)
@@ -49,9 +51,27 @@ def watermark_image(path):
     pass
 
 
+def create_thumbnail(path):
+    os.chdir(path)
+    if not os.path.exists(os.path.join(path, "thumbnails")):
+        os.mkdir("thumbnails")
+    for file in os.listdir():
+        if os.path.isfile(os.path.join(path, file)):
+            try:
+                img = Image.open(file)
+                newimg = img.copy()
+                l, b = img.size
+                factor = 0.8
+                size = (700, 700)
+                newimg.thumbnail(size)
+                newimg.save(f"{path}\\thumbnails\\{file}")
+            except Exception as err:
+                print("Something went wrong!", err)
+
+
 if __name__ == "__main__":
     choice = ""
-    while choice != "q" or choice != "quit":
+    while choice != "q":
         show_menu()
         choice = input("    Enter command: ")
         choice = choice.lower()
@@ -70,7 +90,8 @@ if __name__ == "__main__":
             change_extension(path, ext)
 
         elif choice == "t":
-            pass
+            path = get_directory()
+            create_thumbnail(path)
 
         else:
             print("Invalid command. Please try again.")
