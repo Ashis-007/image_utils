@@ -1,5 +1,5 @@
 import os
-from PIL import Image
+from PIL import Image, ImageEnhance
 
 def change_extension(path, ext):
     os.chdir(path)
@@ -76,3 +76,83 @@ def rotate_image(path, opt):
                     raise Exception("Invalid input")
             except Exception as err:
                 print("Something went wrong!", err)
+
+
+def enhance(newpath, factor):
+    for file in os.listdir():
+        try:
+            if os.path.isfile(f"{newpath}\\{file}"):
+                img = Image.open(file)
+                newimg = ImageEnhance._Enhance(img).enhance(factor)
+                newimg.save(f"{newpath}\\{file}")
+        except Exception as err:
+            print(err)
+        
+
+
+def color(newpath, factor):
+    for file in os.listdir():
+        try:
+            if os.path.isfile(f"{newpath}\\{file}"):
+                img = Image.open(file)
+                newimg = ImageEnhance.Color(img).enhance(factor)
+                newimg.save(f"{newpath}\\{file}")
+        except Exception as err:
+            print(err)
+
+
+def contrast(newpath, factor):
+    for file in os.listdir():
+        try:
+            if os.path.isfile(f"{newpath}\\{file}"):
+                img = Image.open(file)
+                newimg = ImageEnhance.Contrast(img).enhance(factor)
+                newimg.save(f"{newpath}\\{file}")
+        except Exception as err:
+            print(err)
+
+
+def brightness(newpath, factor):
+    for file in os.listdir():
+        try:
+            if os.path.isfile(f"{newpath}\\{file}"):
+                img = Image.open(file)
+                newimg = ImageEnhance.Brightness(img).enhance(factor)
+                newimg.save(f"{newpath}\\{file}")
+        except Exception as err:
+            print(err)
+
+
+def sharpness(newpath, factor):
+    for file in os.listdir():
+        try:
+            if os.path.isfile(f"{newpath}\\{file}"):
+                img = Image.open(file)
+                newimg = ImageEnhance.Sharpness(img).enhance(factor)
+                newimg.save(f"{newpath}\\{file}")
+        except Exception as err:
+            print(err)
+
+
+# e : enhance
+# c : color
+# t : contrast
+# b : brightness
+# s : sharpness
+def edit_image(path, opt, factor):
+    os.chdir(path)
+    newpath = os.path.join(path, "editedImages")
+    if not os.path.exists(newpath):
+        os.mkdir("editedImages")
+    if opt == "e":
+        enhance(newpath, factor)
+    elif opt == "c":
+        color(newpath, factor)
+    elif opt == "t":
+        contrast(newpath, factor)
+    elif opt == "b":
+        brightness(newpath, factor)
+    elif opt == "s":
+        sharpness(newpath, factor)
+    else:
+        print("Invalid input!")
